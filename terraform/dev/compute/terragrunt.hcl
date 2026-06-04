@@ -9,7 +9,7 @@ locals {
 }
 
 terraform {
-  source = "../../../modules/compute"
+  source = "../../modules/compute"
 }
 
 dependency "networking" {
