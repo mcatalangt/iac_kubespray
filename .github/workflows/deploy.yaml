@@ -1,0 +1,67 @@
+name: Deploy GKE
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Stack a desplegar (dev-k8s-base, stage-k8s-ha, production-k8s-ha-observability)"
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - stage
+          - prod
+
+  push:
+    branches: [ "main" ]
+    paths: [ "live/**", "modules/**", ".github/**" ]
+
+jobs:
+  terragrunt:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+
+    env:
+      TARGET_ENV: ${{ inputs.environment || 'dev' }}
+      GOOGLE_PROJECT_ID: ${{ vars.GCP_PROJECT }}
+      GOOGLE_REGION: ${{ vars.GCP_REGION }}
+
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Google Cloud Auth (Workload Identity)
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/397005106927/locations/global/workloadIdentityPools/github-actions-pool/providers/provider-fix'
+          service_account: 'github-actions-sa@lakehouse-475923.iam.gserviceaccount.com'
+          export_environment_variables: true
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        run: |
+                TG_VERSION="v0.54.12"
+                echo "Installing Terragrunt $TG_VERSION..."
+                wget -q "https://github.com/gruntwork-io/terragrunt/releases/download/${TG_VERSION}/terragrunt_linux_amd64"
+                chmod +x terragrunt_linux_amd64
+                sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+                terragrunt --version
+
+      - name: Terragrunt Plan
+        run: cd live/${{ env.TARGET_ENV }} && terragrunt run-all plan --terragrunt-non-interactive --terragrunt-source-update
+
+      - name: Terragrunt Apply
+        if: github.ref == 'refs/heads/main'
+        run: cd live/${{ env.TARGET_ENV }} && terragrunt run-all apply --terragrunt-non-interactive  --terragrunt-source-update

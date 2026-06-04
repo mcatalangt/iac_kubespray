@@ -1,0 +1,21 @@
+plugin: google.cloud.gcp_compute
+projects:
+  - YOUR_PROJECT_ID # TODO: Update with your GCP Project ID
+filters:
+  - labels.cluster = kubespray
+keyed_groups:
+  # Create groups based on the "role" label (e.g., control-plane, worker)
+  - key: labels.role
+    prefix: ""
+    separator: ""
+  # Create kube_control_plane group based on the control-plane role
+  - key: "'kube_control_plane' if labels.role == 'control-plane' else 'none'"
+  # Create kube_node group based on the worker role
+  - key: "'kube_node' if labels.role == 'worker' else 'none'"
+  # Group all kubernetes nodes under k8s_cluster
+  - key: "'k8s_cluster' if labels.cluster == 'kubespray' else 'none'"
+hostnames:
+  - name
+compose:
+  # Use private IP for ansible connection since we are connecting through bastion or VPN
+  ansible_host: networkInterfaces[0].networkIP
