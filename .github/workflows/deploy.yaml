@@ -60,8 +60,8 @@ jobs:
                 terragrunt --version
 
       - name: Terragrunt Plan
-        run: cd live/${{ env.TARGET_ENV }} && terragrunt run-all plan --terragrunt-non-interactive --terragrunt-source-update
+        run: cd terraform/${{ env.TARGET_ENV }} && terragrunt run-all plan --terragrunt-non-interactive --terragrunt-source-update
 
       - name: Terragrunt Apply
         if: github.ref == 'refs/heads/main'
-        run: cd live/${{ env.TARGET_ENV }} && terragrunt run-all apply --terragrunt-non-interactive  --terragrunt-source-update
+        run: cd terraform/${{ env.TARGET_ENV }} && terragrunt run-all apply --terragrunt-non-interactive  --terragrunt-source-update
