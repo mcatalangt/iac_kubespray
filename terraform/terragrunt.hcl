@@ -19,7 +19,7 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    bucket   = "backend-terraform15"
+    bucket   = "backend-terraform16"
     prefix   = "${path_relative_to_include()}/terraform.tfstate"
     project  = "${local.gcp_project_id}"
     location = "${local.gcp_region}"
