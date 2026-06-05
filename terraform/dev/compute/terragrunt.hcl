@@ -5,6 +5,7 @@ include "root" {
 locals {
   gcp_project_id = get_env("GOOGLE_PROJECT_ID", "mi-proyecto-local-fallback")
   gcp_region = get_env("GOOGLE_REGION", "us-central1")
+  gcp_zone = get_env("GOOGLE_ZONE", "us-central1-a")
   deploy_stack = get_env("TARGET_ENV", "dev")
 }
 
@@ -23,7 +24,7 @@ dependency "networking" {
 inputs = {
   project_id = "${local.gcp_project_id}"
   region   = "${local.gcp_region}"
-  zone                 = "us-central1-a"
+  zone     = "${local.gcp_zone}"
   
   network_id           = dependency.networking.outputs.network_id
   subnet_id            = dependency.networking.outputs.subnet_id
