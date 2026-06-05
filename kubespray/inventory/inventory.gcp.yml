@@ -19,3 +19,6 @@ hostnames:
 compose:
   # Use private IP for ansible connection since we are connecting through bastion or VPN
   ansible_host: networkInterfaces[0].networkIP
+
+
+#### TEST
