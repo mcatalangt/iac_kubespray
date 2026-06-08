@@ -39,4 +39,6 @@ inputs = {
   worker_machine_type  = "n2-standard-2"
   bastion_machine_type = "e2-micro"
 
-  ssh_user             = "ubuntu"}
+  ssh_user             = "ubuntu"
+  ssh_pub_key          = "YOUR_SSH_PUBLIC_KEY" # TODO: Provide your SSH public key here (e.g. ssh-ed25519 AAA...)
+}
