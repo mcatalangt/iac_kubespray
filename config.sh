@@ -15,3 +15,15 @@
 gcloud projects add-iam-policy-binding lakehouse-475923 \
   --member="serviceAccount:github-actions-sa@lakehouse-475923.iam.gserviceaccount.com" \
   --role="roles/compute.networkAdmin"
+
+gcloud projects add-iam-policy-binding lakehouse-475923 \
+  --member="serviceAccount:github-actions-sa@lakehouse-475923.iam.gserviceaccount.com" \
+  --role="roles/compute.instanceAdmin.v1"
+
+gcloud projects add-iam-policy-binding lakehouse-475923 \
+  --member="serviceAccount:github-actions-sa@lakehouse-475923.iam.gserviceaccount.com" \
+  --role="roles/container.admin"
+
+gcloud projects add-iam-policy-binding lakehouse-475923 \
+  --member="serviceAccount:github-actions-sa@lakehouse-475923.iam.gserviceaccount.com" \
+  --role="roles/serviceusage.serviceUsageAdmin"

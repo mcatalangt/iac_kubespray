@@ -23,7 +23,7 @@ resource "google_compute_instance_template" "bastion" {
   network_interface {
     network    = var.network_id
     subnetwork = var.subnet_id
-    
+
     # Ephemeral public IP for the bastion
     access_config {}
   }
@@ -65,8 +65,8 @@ resource "google_compute_instance_template" "master" {
     source_image = data.google_compute_image.ubuntu.self_link
     auto_delete  = true
     boot         = true
-    disk_size_gb = 50
-    disk_type    = "pd-ssd"
+    disk_size_gb = 20
+    disk_type    = "pd-standard"
   }
 
   network_interface {
@@ -116,8 +116,8 @@ resource "google_compute_instance_template" "worker" {
     source_image = data.google_compute_image.ubuntu.self_link
     auto_delete  = true
     boot         = true
-    disk_size_gb = 100
-    disk_type    = "pd-ssd"
+    disk_size_gb = 20
+    disk_type    = "pd-standard"
   }
 
   network_interface {
